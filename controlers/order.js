@@ -1,7 +1,8 @@
 const { Order } = require('../models/order')
 const { errorHandler } = require("../helpers/dbErrorHandlers")
 const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey('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');
+const ApiKey = process.env.KEY_SENDGRID
+sgMail.setApiKey(ApiKey);
  
 // your create order method with email capabilities
 exports.create = (req, res) => {
@@ -21,8 +22,8 @@ exports.create = (req, res) => {
         // order.products.length
         // order.amount
         const emailData = {
-            to: 'chraibibrahim61@gmail.com', // admin
-            from: 'noreply@ecommerce.com',
+            to: 'brahimchraibi42@gmail.com', // admin
+            from: 'chraibibrahim61@gmail.com',
             subject: `A new order is received`,
             html: `
             <h1>Hey Admin, Somebody just made a purchase in your ecommerce store</h1>
@@ -55,8 +56,8 @@ exports.create = (req, res) => {
  
         // email to buyer
         const emailData2 = {
-            to: order.user.email,
-            from: 'noreply@ecommerce.com',
+            to: 'brahimchraibi42@gmail.com',
+            from: 'chraibibrahim61@gmail.com',
             subject: `You order is in process`,
             html: `
             <h1>Hey ${req.profile.name}, Thank you for shopping with us.</h1>
