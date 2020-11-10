@@ -2,10 +2,10 @@ const express = require('express');
 const router = express.Router();
 
 const { requireSignin, isAdmin, isAuth } = require('../controlers/auth');
-const { userById } = require('../controlers/user');
+const { userById, addOrderToUserHistory } = require('../controlers/user');
 const { create } = require("../controlers/order")
 
-router.post('/order/create/:userId', create )
+router.post('/order/create/:userId', addOrderToUserHistory, create )
 
 router.param('userId', userById);
 
