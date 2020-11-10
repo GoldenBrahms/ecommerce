@@ -24,10 +24,10 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
     // find user based on email
     const {email, password} = req.body
-    User.findOne({email}, (err, user) => {
-        if (err || !user){
+    User.findOne({email}, (error, user) => {
+        if (error || !user){
             return res.status(400).json({
-                err: 'User with thah email does no t exists'
+                error: 'User with thah email does no t exists'
             })
         }
         // if user is found make sur the email and password match
