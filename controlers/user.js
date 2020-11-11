@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const { Order } = require('../models/order');
 
 exports.userById = (req, res, next, id) => {
     User.findById(id).exec((err, user) => {
@@ -10,6 +11,30 @@ exports.userById = (req, res, next, id) => {
         req.profile = user
         next();
     });
+};
+
+exports.read = (req, res) => {
+    req.profile.hashed_password = undefined;
+    req.profile.salt = undefined;
+    return res.json(req.profile);
+};
+
+exports.update = (req, res) => {
+   User.findOneAndUpdate(
+       { _id: req.profile._id },
+       { $set: req.body },
+       { new: true },
+       (err, user) => {
+           if(err) {
+               return res.status(400).json({
+                   error:"you are not authorized to perform this action"
+               });
+           }
+           user.hashed_password = undefined;
+           user.salt = undefined;
+           res.json(user)
+       }
+   )
 };
 
 exports.addOrderToUserHistory = (req, res, next) => {
@@ -36,3 +61,17 @@ exports.addOrderToUserHistory = (req, res, next) => {
         next();
     });
 };
+
+exports.purchaseHistory = (req, res) => {
+    Order.find({user: req.profile._id})
+    .populate('user', '_id name')
+    .sort('-created')
+    .exec((err, orders) => {
+        if(err) {
+            return res.status(400).json({
+                error: "propbleme heresxs"
+            })
+        }
+        res.json(orders);
+    })
+}

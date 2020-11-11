@@ -1,4 +1,5 @@
 const User = require('../models/user');
+const UserInvite = require('../models/user_invite');
 const jwt = require('jsonwebtoken'); // generate sign token
 const expressJwt = require('express-jwt'); //for authorization check
 const { errorHandler } = require('../helpers/dbErrorHandlers');
@@ -15,6 +16,22 @@ exports.signup = (req, res) => {
         }
         user.salt = undefined
         user.hashed_password = undefined
+        res.json({
+            user
+        });
+    })
+};
+exports.userinvite = (req, res) => {
+    console.log("req.body", req.body)
+    const user = new UserInvite(req.body)
+    console.log(user)
+    user.save((err, user) => {
+        if (err) {
+            console.log("erreur")
+            return res.status(400).json({
+                error: "mierda"
+            });
+        }
         res.json({
             user
         });
@@ -43,8 +60,8 @@ exports.signin = (req, res) => {
         // persist token as 't' in cookie with expiry date
         res.cookie('t', token, {expire: new Date() + 9999})
         //return response with user and token to frontend client
-        const {_id, name, email, role} = user
-        return res.json({ token, user: {_id, name, email, role}})
+        const {_id, name, prename, email, role} = user
+        return res.json({ token, user: {_id, name, prename, email, role}})
     })
 }
 
