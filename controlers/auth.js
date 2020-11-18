@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const UserInvite = require('../models/user_invite');
 const jwt = require('jsonwebtoken'); // generate sign token
+const jwd = require('jsonwebtoken'); // generate sign token
 const expressJwt = require('express-jwt'); //for authorization check
 const { errorHandler } = require('../helpers/dbErrorHandlers');
 
@@ -25,8 +26,8 @@ exports.userinvite = (req, res) => {
     console.log("req.body", req.body)
     const user = new UserInvite(req.body)
     console.log(user)
-    user.save((err, user) => {
-        if (err) {
+    user.save((error, user) => {
+        if (error) {
             console.log("erreur")
             return res.status(400).json({
                 error: "mierda"
@@ -36,6 +37,7 @@ exports.userinvite = (req, res) => {
             user
         });
     })
+   
 };
 
 exports.signin = (req, res) => {
@@ -56,7 +58,7 @@ exports.signin = (req, res) => {
         }
 
         //generate a sign token with used id and secret
-        const token = jwt.sign({_id: user._id}, process.env.JWT_SECRET)
+        const token = jwt.sign({ _id: user._id}, process.env.JWT_SECRET)
         // persist token as 't' in cookie with expiry date
         res.cookie('t', token, {expire: new Date() + 9999})
         //return response with user and token to frontend client

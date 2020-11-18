@@ -1,4 +1,5 @@
 const User = require('../models/user')
+const UserInvite = require('../models/user_invite')
 const { Order } = require('../models/order');
 
 exports.userById = (req, res, next, id) => {
@@ -6,6 +7,17 @@ exports.userById = (req, res, next, id) => {
         if (err || !user) {
             return res.status(400).json({
                 error: 'User not found'
+            })
+        }
+        req.profile = user
+        next();
+    });
+};
+exports.userInviteById = (req, res, next, id) => {
+    UserInvite.findById(id).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User not foound'
             })
         }
         req.profile = user
