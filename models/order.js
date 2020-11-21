@@ -20,6 +20,7 @@ const OrderSchema = new mongoose.Schema(
     transaction_id: {},
     amount: { type: Number },
     address: String,
+    city: String,
     status: {
       type: String,
       default: "Not processed",
@@ -32,5 +33,28 @@ const OrderSchema = new mongoose.Schema(
 );
  
 const Order = mongoose.model("Order", OrderSchema);
+
+const OrderInviteSchema = new mongoose.Schema(
+  {
+    products: [CartItemSchema],
+    transaction_id: {},
+    amount: { type: Number },
+    name: String,
+    prename: String,
+    address: String,
+    zipcode: Number,
+    city: String,
+    status: {
+      type: String,
+      default: "Not processed",
+      enum: ["Not processed", "Processing", "Shipped", "Delivered", "Cancelled"] // enum means string objects
+    },
+    updated: Date,
+    user: { type: ObjectId, ref: "User" }
+  },
+  { timestamps: true }
+);
  
-module.exports = { Order, CartItem };
+const InviteOrder = mongoose.model("InviteOrder", OrderInviteSchema);
+ 
+module.exports = {InviteOrder, Order, CartItem };

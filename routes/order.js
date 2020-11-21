@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 
 const { requireSignin, isAdmin, isAuth } = require('../controlers/auth');
-const { userById,userInviteById, addOrderToUserHistory } = require('../controlers/user');
-const { create } = require("../controlers/order")
+const { userById, userInviteById, addOrderToUserHistory } = require('../controlers/user');
+const { create, createInvite} = require("../controlers/order")
 
-router.post('/order/create/:userId', isAuth, create )
-router.post('/order/createInvite/:userInviteId', create )
+router.post('/order/create/:userId',requireSignin, isAuth, create )
+router.post('/order/createInvite/:userInviteId', createInvite )
 
 router.param('userId', userById);
-router.param('userId', userInviteById);
+router.param('userInviteId', userInviteById);
 
 module.exports = router;
