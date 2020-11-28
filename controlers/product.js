@@ -20,6 +20,20 @@ exports.read = (req, res) => {
     req.product.photo = undefined
     return res.json(req.product)
 }
+exports.getProduct = (req, res) => {
+    let findArgs = {
+        name: "Lecteur Coran et veilleuse"
+    };
+    Product.find(findArgs)
+    .exec((err, product) => {
+        if (err) {
+            return res.status(400).json({
+                error: 'Products not found'
+            });
+        }
+        res.json(product);
+    });
+}
 
 exports.remove = (req, res) => {
     let product = req.product

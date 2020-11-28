@@ -59,8 +59,9 @@ exports.create = (req, res) => {
         const emailData2 = {
             to: 'brahimchraibi42@gmail.com',
             from: 'chraibibrahim61@gmail.com',
-            subject: `You order is in process`,
+            subject: `Votre commande Samemo.fr`,
             html: `
+            <h3>Bonjour</h3>,
             <h1>Hey ${req.profile.name}, Thank you for shopping with us.</h1>
             <h2>Total products: ${order.products.length}</h2>
             <h2>Transaction ID: ${order.transaction_id}</h2>

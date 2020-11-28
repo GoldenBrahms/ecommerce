@@ -4,6 +4,9 @@ const jwt = require('jsonwebtoken'); // generate sign token
 const jwd = require('jsonwebtoken'); // generate sign token
 const expressJwt = require('express-jwt'); //for authorization check
 const { errorHandler } = require('../helpers/dbErrorHandlers');
+const sgMail = require('@sendgrid/mail');
+const ApiKey = process.env.KEY_SENDGRID
+sgMail.setApiKey(ApiKey);
 
 exports.signup = (req, res) => {
     console.log("req.body", req.body)
@@ -21,6 +24,33 @@ exports.signup = (req, res) => {
             user
         });
     })
+};
+exports.sendmail = (req, res, next) => {
+    console.log("req.body", req.body)
+    const msg = {
+        to: 'brahimchraibi42@gmail.com',
+        from: 'chraibibrahim61@gmail.com',
+        subject: 'Website Contact',
+        text: req.body.message,
+        text: req.body.email
+    }
+    sgMail.send(msg)
+        .then(result => {
+
+            res.status(200).json({
+                success: true
+            });
+
+        })
+        .catch(err => {
+
+            console.log('error: ', err);
+            res.status(401).json({
+                success: false
+            });
+
+        });
+    
 };
 exports.userinvite = (req, res) => {
     console.log("req.body", req.body)
