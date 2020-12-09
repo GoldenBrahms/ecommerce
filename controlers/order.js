@@ -59,7 +59,7 @@ exports.create = (req, res) => {
         const emailData2 = {
             to: 'brahimchraibi42@gmail.com',
             from: 'chraibibrahim61@gmail.com',
-            subject: `Votre commande Samemo.fr`,
+            subject: `Votre commande Lirya.fr`,
             html: `
             <h3>Bonjour</h3>,
             <h1>Hey ${req.profile.name}, Thank you for shopping with us.</h1>

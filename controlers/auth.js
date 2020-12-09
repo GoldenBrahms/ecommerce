@@ -1,5 +1,6 @@
 const User = require('../models/user');
 const UserInvite = require('../models/user_invite');
+const Comments = require('../models/comments');
 const jwt = require('jsonwebtoken'); // generate sign token
 const jwd = require('jsonwebtoken'); // generate sign token
 const expressJwt = require('express-jwt'); //for authorization check
@@ -101,6 +102,21 @@ exports.signout = (req, res) => {
     res.clearCookie('t')
     res.json({ message: "Signout Success"})
 }
+exports.updateUser = (req, res) => {
+    const {email, adresse, ville, codePostal} = req.body
+    console.log( req.body)
+    User.findOneAndUpdate({email } ,{ $set: { adresse: (adresse), "ville": (ville), codePostal: (codePostal) } }, { new: true }, function(err, result){
+
+        if(err){
+            res.send(err)
+        }
+        else{
+            res.send(result)
+        }
+        console.log(result);
+
+    })
+};
 
 
 exports.requireSignin = expressJwt({
@@ -129,3 +145,30 @@ exports.requireSignin = expressJwt({
       }
       next();
   }
+  exports.comments = (req, res) => {
+    console.log("req.body", req.body)
+    const comments = new Comments(req.body)
+    console.log(comments)
+    comments.save((error, comments) => {
+        if (error) {
+            console.log("erreur")
+            return res.status(400).json({
+                error: "mierda"
+            });
+        }
+        res.json({
+            comments
+        });
+    })
+  }
+
+  exports.listComments = (req, res) => {
+    Comments.find().exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                err: errorHandler(err)
+            })
+        }
+        res.json(data);
+    })
+}
